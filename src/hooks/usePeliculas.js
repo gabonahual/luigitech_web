@@ -18,7 +18,7 @@ export function usePeliculas() {
   const regex = new RegExp(texto, 'i');
   const resultados = peliculas.filter((peli) => regex.test(peli.titulo));
 
-  if (resultados.length >= 2) return resultados;
+  if (resultados.length >= 4) return resultados;
 
   // Agrega 5 aleatorias si hay pocos resultados
   const restantes = peliculas.filter((peli) => !resultados.includes(peli));
