@@ -10,6 +10,8 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { es } from 'date-fns/locale';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const memberships = [
   {
@@ -83,15 +85,29 @@ export const RegisterPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const navigate = useNavigate();
+
   const handleNext = () => {
     if (validateStep()) {
       if (step === 2) {
-        alert('Formulario enviado');
+        Swal.fire({
+          icon: 'success',
+          title: 'Se ha creado con éxito la cuenta',
+          text: 'Te mandaremos al login para que inicies sesión',
+          confirmButtonColor: '#b03a27',
+          timer: 2500,
+          showConfirmButton: false,
+        });
+
+        setTimeout(() => {
+          navigate('/auth/login');
+        }, 2500);
       } else {
         setStep((prev) => prev + 1);
       }
     }
   };
+
 
   const handleBack = () => {
     setStep((prev) => Math.max(prev - 1, 0));

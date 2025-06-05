@@ -117,10 +117,12 @@ export const LuigiTechSearch = () => {
               onClick={() => handleGeneroClick(genero)}
               sx={{
                 backgroundColor: '#C1282C',
-                height: '56px',
-                fontSize: '0.95rem',
                 fontWeight: 'bold',
-                px: 3,
+                textTransform: 'none',
+                px: { xs: 2, sm: 3 },
+                py: { xs: 1, sm: 1.5 },
+                fontSize: { xs: '0.75rem', sm: '1.2rem' },
+                height: { xs: 42, sm: 56 },
                 '&:hover': { backgroundColor: '#a41e23' },
               }}
             >
@@ -130,127 +132,123 @@ export const LuigiTechSearch = () => {
         </Box>
 
         {/* Resultados */}
-        <Box sx={{ flex: 1, overflowY: 'visible' }}>
-          <Grid
-            container
-            spacing={3}
-            columns={{ xs: 12, sm: 12, md: 12, lg: 12 }}
-            justifyContent="center"
-          >
-            {resultados.map((peli, idx) => (
-              <Grid
-                item
-                key={idx}
-                xs={12}
-                sm={6}
-                md={4}
-                lg={2.4}
-                sx={{ display: 'flex', justifyContent: 'center', overflow: 'visible' }}
-              >
-                <Paper
-                  onClick={() => {
-                    const imagen = imagenes[idx % imagenes.length];
-                    localStorage.setItem('pelicula_seleccionada', JSON.stringify({ ...peli, imagen }));
-                      navigate('/movie');
-                    }}
-                  elevation={6}
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: 'auto',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 2,
+            justifyContent: 'center',
+          }}
+        >
+          {resultados.map((peli, idx) => (
+            <Box
+              key={idx}
+              sx={{
+                width: 'calc(20% - 16px)',
+                minWidth: 180,
+                maxWidth: 260,
+                height: 380,
+                border: '3px solid #C1282C',
+                borderRadius: 4,
+                overflow: 'hidden',
+                backgroundImage: `url(${imagenes[idx % imagenes.length]})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                '&:hover': {
+                  transform: 'scale(1.03)',
+                  boxShadow: '0 8px 20px rgba(0, 0, 0, 0.25)',
+                },
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                const imagen = imagenes[idx % imagenes.length];
+                localStorage.setItem(
+                  'pelicula_seleccionada',
+                  JSON.stringify({ ...peli, imagen })
+                );
+                navigate('/movie');
+              }}
+            >
+              <Box sx={{ px: 2, color: '#fff', textShadow: '1px 1px 2px rgba(0,0,0,0.9)' }}>
+                <Box
                   sx={{
-                    width: '100%',
-                    maxWidth: 260,
-                    height: 380,
-                    border: '3px solid #C1282C',
-                    borderRadius: 4,
-                    overflow: 'hidden',
-                    position: 'relative',
-                    backgroundImage: `url(${imagenes[idx % imagenes.length]})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    '&:hover': {
-                      transform: 'scale(1.03)',
-                      boxShadow: '0 8px 20px rgba(0, 0, 0, 0.25)',
-                    },
-                    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                    borderRadius: 1,
+                    mb: 1,
+                    px: 1,
                   }}
                 >
-                  <Box sx={{ px: 2, color: '#fff', textShadow: '1px 1px 2px rgba(0,0,0,0.9)' }}>
-                    <Box
-                      sx={{
-                        backgroundColor: 'rgba(0,0,0,0.6)',
-                        borderRadius: 1,
-                        mb: 1,
-                        px: 1,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        sx={{
-                          fontWeight: 'bold',
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        {peli.titulo}
-                      </Typography>
-                    </Box>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      fontWeight: 'bold',
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    {peli.titulo}
+                  </Typography>
+                </Box>
 
-                    <Box
-                      sx={{
-                        backgroundColor: 'rgba(0,0,0,0.6)',
-                        borderRadius: 1,
-                        mb: 1,
-                        px: 1,
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontStyle: 'italic',
-                          fontSize: '1rem',
-                          lineHeight: 1.4,
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        {peli.descripcion}
-                      </Typography>
-                    </Box>
+                <Box
+                  sx={{
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                    borderRadius: 1,
+                    mb: 1,
+                    px: 1,
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontStyle: 'italic',
+                      fontSize: '1rem',
+                      lineHeight: 1.4,
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    {peli.descripcion}
+                  </Typography>
+                </Box>
 
-                    <Box
-                      sx={{
-                        backgroundColor: 'rgba(0,0,0,0.6)',
-                        borderRadius: 1,
-                        mb: 1,
-                        px: 1,
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        sx={{ fontWeight: 600, textDecoration: 'underline' }}
-                      >
-                        🎬 {peli.director}
-                      </Typography>
-                    </Box>
+                <Box
+                  sx={{
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                    borderRadius: 1,
+                    mb: 1,
+                    px: 1,
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{ fontWeight: 600, textDecoration: 'underline' }}
+                  >
+                    🎬 {peli.director}
+                  </Typography>
+                </Box>
 
-                    <Box
-                      sx={{
-                        backgroundColor: 'rgba(0,0,0,0.6)',
-                        borderRadius: 1,
-                        px: 1,
-                      }}
-                    >
-                      <Typography variant="body1" sx={{ textDecoration: 'underline' }}>
-                        📅 {peli.anio} &nbsp;&nbsp; ⏱ {peli.duracion} min
-                      </Typography>
-                    </Box>
-                  </Box>
-                </Paper>
-
-              </Grid>
-            ))}
-          </Grid>
+                <Box
+                  sx={{
+                    backgroundColor: 'rgba(0,0,0,0.6)',
+                    borderRadius: 1,
+                    px: 1,
+                  }}
+                >
+                  <Typography variant="body1" sx={{ textDecoration: 'underline' }}>
+                    📅 {peli.anio} &nbsp;&nbsp; ⏱ {peli.duracion} min
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          ))}
         </Box>
+
       </Box>
     </Box>
   );
