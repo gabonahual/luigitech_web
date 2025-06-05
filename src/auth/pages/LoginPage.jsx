@@ -8,23 +8,71 @@ import {
   IconButton,
   Paper,
   Link,
+  Alert,
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const backgroundImage = 'url("/fondo-principal.jpg")';
 
 export const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
+
+  const isValidEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // lógica de envío
+    if (!isValidEmail(email)) {
+      setError('Por favor ingresa un correo válido');
+      return;
+    }
+
+    if (!password.trim()) {
+      setError('La contraseña no puede estar vacía');
+      return;
+    }
+
+    setError('');
+    Swal.fire({
+      icon: 'success',
+      title: 'Inicio de sesión correcto',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+
+    setTimeout(() => {
+      navigate('/search');
+    }, 2000);
   };
 
   const handleGoogleLogin = () => {
-    alert("Simulación: redirigiendo a Google Login...");
+    Swal.fire({
+      icon: 'warning',
+      title: 'No nos pagan lo suficiente 🗣️',
+      text: 'Espere la actualización',
+      confirmButtonColor: '#c23b22',
+    });
+  };
+
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Olvidaste tu contraseña?',
+      text: 'No t e preocupes, no la tenemos guardada 😜',
+      confirmButtonColor: '#c23b22',
+    });
   };
 
   return (
@@ -50,10 +98,15 @@ export const LoginPage = () => {
           backgroundColor: 'white',
         }}
       >
-
         <Typography variant="h5" gutterBottom color="#333">
           Iniciar Sesión
         </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
         <form onSubmit={handleSubmit}>
           <TextField
@@ -64,7 +117,8 @@ export const LoginPage = () => {
             margin="normal"
             required
             size="small"
-            sx={{ borderRadius: 2 }}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             label="Contraseña"
@@ -74,10 +128,17 @@ export const LoginPage = () => {
             margin="normal"
             required
             size="small"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleTogglePassword} edge="end" size="small" sx={{ color: '#c23b22' }}>
+                  <IconButton
+                    onClick={handleTogglePassword}
+                    edge="end"
+                    size="small"
+                    sx={{ color: '#c23b22' }}
+                  >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
@@ -117,10 +178,10 @@ export const LoginPage = () => {
         </Button>
 
         <Box mt={2} sx={{ fontSize: 14 }}>
-          <Link href="/registro" underline="hover" sx={{ display: 'block', color: '#c23b22', mt: 1 }}>
+          <Link href="/auth/register" underline="hover" sx={{ display: 'block', color: '#c23b22', mt: 1 }}>
             ¿Eres nuevo? Crear cuenta
           </Link>
-          <Link href="/recuperar_contraseña" underline="hover" sx={{ display: 'block', color: '#c23b22', mt: 1 }}>
+          <Link href="#" onClick={handleForgotPassword} underline="hover" sx={{ display: 'block', color: '#c23b22', mt: 1 }}>
             ¿Olvidaste tu contraseña?
           </Link>
         </Box>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { usePeliculas } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -15,6 +16,7 @@ export const LuigiTechSearch = () => {
   const { buscarPorTitulo } = usePeliculas();
   const [busqueda, setBusqueda] = useState('');
   const [resultados, setResultados] = useState([]);
+  const navigate = useNavigate();
 
   const imagenes = [
     'https://picsum.photos/300/400?random=1',
@@ -146,6 +148,11 @@ export const LuigiTechSearch = () => {
                 sx={{ display: 'flex', justifyContent: 'center', overflow: 'visible' }}
               >
                 <Paper
+                  onClick={() => {
+                    const imagen = imagenes[idx % imagenes.length];
+                    localStorage.setItem('pelicula_seleccionada', JSON.stringify({ ...peli, imagen }));
+                      navigate('/movie');
+                    }}
                   elevation={6}
                   sx={{
                     width: '100%',
